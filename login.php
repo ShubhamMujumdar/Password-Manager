@@ -130,7 +130,7 @@ session_start();
 if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)) {
     
     
-    $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "taskround-3134378848");
+    $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "collegekids-313331a8e8");
     if (mysqli_connect_error()) {
     
     die ("There was an issue with connecting to the database.");
@@ -139,19 +139,21 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
     
     if ($_POST['username'] == '' or $_POST['password'] == '') {
         
-        echo "<div class='alert alert-danger' role='alert'>
+        echo "<div class='alert alert-danger' role='alert' align='center'>
                 Fill in all the details to log in
             </div>";
     }
     else {
-        $queryu = "SELECT `id` FROM `signin_data` WHERE username = '".$_POST['username']."'";
+        $queryu = "SELECT `id` FROM `pwdlogin` WHERE username = '".$_POST['username']."'";
         $resultu = mysqli_query($link, $queryu);
         $uid = mysqli_fetch_array($resultu);
         if (!isset($uid)){
-            echo "<p style='margin-left: 550px; '><font color=red>That username doesn't exist, Sign up.</font></p>"; 
+            echo "<p style='margin-left: 550px; '><div class='alert alert-danger' role='alert'>
+                That username doesn't exist!
+            </div></p>"; 
         }
         else{
-            $queryp = "SELECT `password` FROM `signin_data` WHERE `id` = '".$uid[0]."'";
+            $queryp = "SELECT `password` FROM `pwdlogin` WHERE `id` = '".$uid[0]."'";
             $resultp = mysqli_query($link, $queryp);
             $p = mysqli_fetch_array($resultp);
             if ($p[0] == $_POST['password']){
@@ -160,7 +162,9 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
                 
             }
             else {
-                echo "<p align = 'center'><font color=red>Password is incorrect.</font></p>";
+                echo "<div class='alert alert-danger' align='center' role='alert'>
+                Password incorrect.
+            </div>";
             }
         }
     }
