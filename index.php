@@ -1,6 +1,3 @@
-<?php 
-
-?>
 
 <html lang="en">
     <head>
@@ -57,6 +54,11 @@
                 margin-left:94%;
                 margin-bottom:0px;
             }
+            #button2:hover span {display:none}
+            #button2 {
+                width: 200px;
+            }
+            #button2:hover:before {content:"Log out"}
             
             
         </style>
@@ -79,14 +81,36 @@
             <li class="nav-item">
                 <a class="nav-link" href="#about">About</a>
             </li>
-            <li class="nav-item">
+            <!--<li class="nav-item">
                 <a class="nav-link" href="/developer">Developer</a>
-            </li>
-            <li class="nav-item">
-                <a href="/login.php" style="margin-left:570px;"><button type="button" class="btn btn-outline-light">Log in</button></a>
-                <a href="/signup.php" ><button type="button" class="btn btn-outline-light">Sign up</button></a>
-            </li>
+            </li>-->
+            <?php
+            session_start();
+            if (isset($_SESSION["id"])){
+                echo '<li class="nav-item">
+                <a class="nav-link" href="home.php">Your profile</a>
+            </li>';
+            }
+            ?>
+            
             </ul>
+            <?php
+            session_start();
+            if (!isset($_SESSION["id"])){
+        echo '<a href="login.php"><button type="button" class="btn btn-outline-light">Log In</button></a> 
+              <a href="signup.php"><button type="button" class="btn btn-outline-light" style="margin-left: 4px;" href="signup.php">Sign Up</button></a>';
+    
+                }
+            else {
+                    $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "collegekids-313331a8e8");
+                    $namequery = "SELECT `name` FROM `pwdlogin` WHERE `id` = '".$_SESSION["id"]."'";
+                    $nameresult = mysqli_query($link, $namequery);
+                    $name = mysqli_fetch_array($nameresult);
+                    echo "<a class='nav-link' href='/logout.php'><button type='button' class='btn btn-outline-light' id='button2'><span> Logged in as " . $name[0] . "</span></button></a>";
+        
+                }
+    
+    ?>
             
         </div>
         </nav>

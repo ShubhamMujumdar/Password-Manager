@@ -1,6 +1,7 @@
 <html lang = "en">
     <head>
         <title>Sign Up!</title>
+        <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Roboto:wght@300&family=Tangerine&display=swap" rel="stylesheet">
         <style type = "text/css">
             body {
                 font-family: "Lato", sans-serif;

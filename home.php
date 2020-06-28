@@ -1,7 +1,3 @@
-<?php
-    session_start();
-?>
-
 <html lang="en">
     <head>
         <title>Password Manager</title>
@@ -15,6 +11,18 @@
             .right {
                 text-align: right;
             }
+            button:hover span {display:none}
+            button {
+                width: 200px;
+            }
+            button:hover:before {content:"Log out"}
+            #title {
+                
+                color: white;
+                font-family: 'Julius Sans One', sans-serif;
+
+                
+            }
         </style>
         
     </head>
@@ -22,7 +30,7 @@
     <body style="background-color:black">
         <div class="navbartop">
             <nav class="navbar navbar-expand-lg navbar-dark">
-                <a class="navbar-brand" id="title" href="#">Password Manager</a>
+                <a class="navbar-brand" id="title" href="index.php">Password Manager</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -30,24 +38,26 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/index.php">Home</a>
+                <a class="nav-link" href="index.php">Home</a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link" href="developer.php">Developer</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Your profile:)<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#">Your profile<span class="sr-only">(current)</span></a>
             </li>
-            
+            </ul>
+            <ul class="navbar-nav ml-auto">
             <li class="nav-item" class="right">
                 <?php
+                    session_start();
                     $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "collegekids-313331a8e8");
                     if (isset ($_SESSION["id"])){
                         $namequery = "SELECT `name` FROM `pwdlogin` WHERE `id` = '".$_SESSION["id"]."'";
                         $nameresult = mysqli_query($link, $namequery);
                         $name = mysqli_fetch_array($nameresult);
-                        echo "<p style='color: white;'> Logged in as " . $name[0] . "</p>";
+                        echo "<a class='nav-link' href='/logout.php'><button type='button' class='btn btn-outline-light'><span> Logged in as " . $name[0] . "</span></button></a>";
                     }
                     else {
                         echo "<script type='text/javascript'> document.location = '/loginerror.php'; </script>";
