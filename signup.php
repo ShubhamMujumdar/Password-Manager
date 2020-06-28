@@ -168,7 +168,7 @@ if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or 
                 $id = mysqli_fetch_array($idresult);
                 session_start();
                 $_SESSION["id"] = $id[0];
-                echo "<script type='text/javascript'> document.location = 'index.php'; </script>";
+                echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
                 
                 
                 

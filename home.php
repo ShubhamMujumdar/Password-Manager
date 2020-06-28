@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <html lang="en">
     <head>
         <title>Password Manager</title>
@@ -11,17 +14,31 @@
             .right {
                 text-align: right;
             }
-            button:hover span {display:none}
-            button {
+            .button1:hover span {display:none}
+            .button1 {
                 width: 200px;
             }
-            button:hover:before {content:"Log out"}
+            .button1:hover:before {content:"Log out"}
             #title {
                 
                 color: white;
                 font-family: 'Julius Sans One', sans-serif;
 
                 
+            }
+            .column {
+                float: left;
+                width: 50%;
+            }
+
+
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            #left {
+                border-right: 1px solid white;
             }
         </style>
         
@@ -57,10 +74,11 @@
                         $namequery = "SELECT `name` FROM `pwdlogin` WHERE `id` = '".$_SESSION["id"]."'";
                         $nameresult = mysqli_query($link, $namequery);
                         $name = mysqli_fetch_array($nameresult);
-                        echo "<a class='nav-link' href='/logout.php'><button type='button' class='btn btn-outline-light'><span> Logged in as " . $name[0] . "</span></button></a>";
+                        echo "<a class='nav-link' href='/logout.php'><button type='button' class='btn btn-outline-light button1'><span> Logged in as " . $name[0] . "</span></button></a>";
                     }
                     else {
                         echo "<script type='text/javascript'> document.location = '/loginerror.php'; </script>";
+                        
                     }
         
                 ?>
@@ -69,6 +87,45 @@
             
         </div>
         </nav>
+        </div>
+        
+        <div class="row">
+            <div class="column" style="padding:20px;" id="left">
+                <div class="row">
+          <div class="col-lg-6">
+            <div class="bs-component">
+              <form style="margin-left:20%;">
+                <fieldset>
+                  <legend style="color:white">Add new account</legend>
+                  
+                  <div class="form-group">
+                    <label for="pl" style="color:white">Platform</label>
+                    <input type="text" class="form-control" id="pl" aria-describedby="plHelp" placeholder="Enter platform">
+                    <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="un" style="color:white">Username</label>
+                    <input type="text" class="form-control" id="un" aria-describedby="unHelp" placeholder="Enter username">
+                    <small id="unHelp" class="form-text text-muted">We'll never share your details with anyone else.</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1" style="color:white">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+                
+            </div>
+            </div>
+            </div>
+            <div class="column">
+                
+                <p>hi</p>
+            </div>
         </div>
         
         

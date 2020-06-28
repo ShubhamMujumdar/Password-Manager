@@ -159,12 +159,12 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
             if ($p[0] == $_POST['password']){
                 $_SESSION["id"] = $uid[0];
                 echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
-                
             }
             else {
                 echo "<div class='alert alert-danger' align='center' role='alert'>
                 Password incorrect.
             </div>";
+            
             }
         }
     }
