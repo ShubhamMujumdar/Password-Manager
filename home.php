@@ -57,10 +57,7 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="index.php">Home</a>
             </li>
-            
-            <li class="nav-item">
-                <a class="nav-link" href="developer.php">Developer</a>
-            </li>
+           
             <li class="nav-item active">
                 <a class="nav-link" href="#">Your profile<span class="sr-only">(current)</span></a>
             </li>
@@ -91,40 +88,86 @@ session_start();
         
         <div class="row">
             <div class="column" style="padding:20px;" id="left">
-                <div class="row">
+            
+<div class="row">
           <div class="col-lg-6">
             <div class="bs-component">
-              <form style="margin-left:20%;">
+              <form style="margin-left:20%;" method="post">
                 <fieldset>
                   <legend style="color:white">Add new account</legend>
                   
                   <div class="form-group">
-                    <label for="pl" style="color:white">Platform</label>
-                    <input type="text" class="form-control" id="pl" aria-describedby="plHelp" placeholder="Enter platform">
+                    <label for="platform" style="color:white">Platform</label>
+                    <input type="text" class="form-control" id="platform" name = "platform" aria-describedby="plHelp" placeholder="Enter platform">
                     <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
                   </div>
                   
                   <div class="form-group">
-                    <label for="un" style="color:white">Username</label>
-                    <input type="text" class="form-control" id="un" aria-describedby="unHelp" placeholder="Enter username">
+                    <label for="username" style="color:white">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" aria-describedby="unHelp" placeholder="Enter username">
                     <small id="unHelp" class="form-text text-muted">We'll never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1" style="color:white">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <label for="password" style="color:white">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                   </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary">Add</button>
                 </fieldset>
               </form>
             </div>
           </div>
+          </div>    
+          
+          
                 
-            </div>
-            </div>
-            </div>
-            <div class="column">
+            
+            <?php
+            if (array_key_exists('platform', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST)) {
+                //echo "<p style='margin-left:75%; color:white;'>Hi</p>";
+                if ($_POST['platform'] == '' or $_POST['username'] == '' or $_POST['password'] == '') {
+        
+                    echo "<div class='alert alert-danger' role='alert'>
+                        Please enter all details!
+                        </div>";
+                }
+                else {
+                    $query = "INSERT INTO `pwddata` (`login_id`, `platform`, `username`, `password`) VALUES ('".mysqli_real_escape_string($link, $_SESSION["id"])."', '".mysqli_real_escape_string($link, $_POST['platform'])."', '".mysqli_real_escape_string($link, $_POST['username'])."', '".mysqli_real_escape_string($link, $_POST['password'])."')";
+                    $result = mysqli_query($link, $query);
+                    echo "<div class='alert alert-success' role='alert'>
+                        Data entered successfully!
+                        </div>";
+            }
+                    
+                }
                 
-                <p>hi</p>
+            
+            ?>
+            </div>
+            <div class="column" align="center">
+                
+                <?php
+                
+                $result = mysqli_query($link,"SELECT * FROM pwddata WHERE login_id='".mysqli_real_escape_string($link, $_SESSION["id"])."')");
+
+                echo "<table class='table-dark' border='1'>
+                    <tr>
+                    <th>Platform</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    </tr>";
+    
+                while($row = mysqli_fetch_array($result))
+            {
+                echo "<tr>";
+                echo "<td>" . $row['platform'] . "</td>";
+                echo "<td>" . $row['username'] . "</td>";
+                echo "<td>" . $row['password'] . "</td>";
+                echo "</tr>";
+            }
+                echo "</table>";
+                
+                ?>
+
             </div>
         </div>
         
