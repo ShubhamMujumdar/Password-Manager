@@ -37,8 +37,17 @@ session_start();
                 display: table;
                 clear: both;
             }
-            #left {
-                border-right: 1px solid white;
+            #right {
+                border-left: 1px solid white;
+            }
+            #labelcenter {
+                text-align: center;
+            }
+            th{
+                text-align: center;
+            }
+            td{
+                text-align: center;
             }
         </style>
         
@@ -87,14 +96,64 @@ session_start();
         </div>
         
         <div class="row">
-            <div class="column" style="padding:20px;" id="left">
             
-<div class="row">
+            <div class="column" align="center">
+                <?php
+                
+                $result = mysqli_query($link,"SELECT * FROM pwddata WHERE login_id='".mysqli_real_escape_string($link, $_SESSION["id"])."'");
+                echo "<br><br><table class='table-dark' id='editableTable' border='1' width='90%'>
+                    <tr>
+                    <th>Platform</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th id='labelcenter'>Action</th>
+                    </tr>";
+    
+                while($row = mysqli_fetch_array($result))
+                {
+                    echo "<tr>";
+                    echo "<td>" . $row['platform'] . "</td>";
+                    echo "<td>" . $row['username'] . "</td>";
+                    echo "<td>" . $row['password'] . "</td>";
+                    echo "<td><form method='post' style='height:25px'><button type='submit' name='edit' value=" .$row['id']." id='edit' class='btn btn-success'>Edit</button>
+                    <button type='submit' name='delete' value=".$row['id']." id='delete' class='btn btn-danger'>Delete</button></form></td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+                
+                if (isset($_POST['edit'])){
+                    $resultedit = mysqli_query($link,"SELECT * FROM pwddata WHERE id='".mysqli_real_escape_string($link, $_POST["edit"])."'");
+                    $rowedit = mysqli_fetch_array($resultedit);
+                    $platformedit = $rowedit["platform"];
+                    $usernameedit = $rowedit["username"];
+                    $passwordedit = $rowedit["password"];
+                    $_SESSION['idedit'] = $_POST['edit'];
+                    
+                        
+                    
+                    
+                    
+                }
+                
+                
+                ?>
+                
+            
+            </div>
+        
+                
+            <div class="column" style="padding:20px;" id="right">
+            
+            <div class="row">
           <div class="col-lg-6">
             <div class="bs-component">
-              <form style="margin-left:20%;" method="post">
+              <form method="post">
                 <fieldset>
-                  <legend style="color:white">Add new account</legend>
+                <?php 
+                if (!isset($_POST["edit"])){
+                 echo '<legend style="color:white">Add new account</legend>
+                
+                
                   
                   <div class="form-group">
                     <label for="platform" style="color:white">Platform</label>
@@ -105,18 +164,54 @@ session_start();
                   <div class="form-group">
                     <label for="username" style="color:white">Username</label>
                     <input type="text" class="form-control" id="username" name="username" aria-describedby="unHelp" placeholder="Enter username">
-                    <small id="unHelp" class="form-text text-muted">We'll never share your details with anyone else.</small>
+                    <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
                     <label for="password" style="color:white">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                   </div>
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" class="btn btn-primary">Add</button>';
+                  
+                  
+                  
+                  }
+                else {
+                    $result = mysqli_query($link,"SELECT * FROM pwddata WHERE id='".$POST['edit']."'");
+                    $row = mysqli_fetch_array($result);
+                    
+                    
+                    
+                    echo '<legend style="color:white">Edit entry</legend>
+                
+                
+                  
+                  <div class="form-group">
+                    <label for="platforme" style="color:white">Platform</label>
+                    <input type="text" class="form-control" id="platforme" name = "platforme" aria-describedby="plHelp" value="'.$platformedit.'">
+                    <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="usernamee" style="color:white">Username</label>
+                    <input type="text" class="form-control" id="usernamee" name="usernamee" aria-describedby="unHelp" value="'.$usernameedit.'">
+                    <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="passworde" style="color:white">Password</label>
+                    <input type="password" class="form-control" id="passworde" name="passworde" value="'.$passwordedit.'">
+                  </div>
+                  <button type="submit" class="btn btn-success">Save</button>
+                  <a href="home.php"><button type="button" class="btn btn-danger">Cancel</button></a>';
+                    
+                }
+                
+                ?>
                 </fieldset>
               </form>
             </div>
           </div>
-          </div>    
+          </div>  
+          
           
           
                 
@@ -136,41 +231,42 @@ session_start();
                     echo "<div class='alert alert-success' role='alert'>
                         Data entered successfully!
                         </div>";
+                    echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
             }
                     
                 }
-                
+             
+             if (array_key_exists('platforme', $_POST) or array_key_exists('usernamee', $_POST) or array_key_exists('passworde', $_POST)) {
+                //echo "<p style='margin-left:75%; color:white;'>Hi</p>";
+                if ($_POST['platforme'] == '' or $_POST['usernamee'] == '' or $_POST['passworde'] == '') {
+        
+                    echo "<div class='alert alert-danger' role='alert'>
+                        Please enter all details!
+                        </div>";
+                }
+                else {
+                    
+                    $queryed = "UPDATE `pwddata` SET `platform` = '".$_POST['platforme']."', `username` = '".$_POST['usernamee']."', `password` = '".$_POST['passworde']."' WHERE `id` = '".$_SESSION['idedit']."'";
+                    $resulted = mysqli_query($link, $queryed);
+                    echo "<div class='alert alert-success' role='alert'>
+                        Data editted successfully!
+                        </div>";
+                    unset($_SESSION['idedit']);
+                    echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
+                    
+                    
+                    
+                    
+            }
+                    
+                }
+                   
             
             ?>
+            
             </div>
-            <div class="column" align="center">
-                
-                <?php
-                
-                $result = mysqli_query($link,"SELECT * FROM pwddata WHERE login_id='".mysqli_real_escape_string($link, $_SESSION["id"])."')");
-
-                echo "<table class='table-dark' border='1'>
-                    <tr>
-                    <th>Platform</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    </tr>";
-    
-                while($row = mysqli_fetch_array($result))
-            {
-                echo "<tr>";
-                echo "<td>" . $row['platform'] . "</td>";
-                echo "<td>" . $row['username'] . "</td>";
-                echo "<td>" . $row['password'] . "</td>";
-                echo "</tr>";
-            }
-                echo "</table>";
-                
-                ?>
-
             </div>
-        </div>
-        
+   
         
     </body>
     
