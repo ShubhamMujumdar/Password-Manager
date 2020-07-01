@@ -119,12 +119,12 @@
                      <div id="strong"></div>
                   </div>
                   <button type="submit" class="btn btn-black">Login</button>
-                  <a href="forgotpassword.php"><button class="btn btn-danger">Forgot Password</button></a>
+                  <a href="forgotpassword.php"><input class="btn btn-danger" value="Forgot Password" style="width:150px"></input></a>
                   </form>
                   <br>
                   <a href="signup.php"><button type="button" class="btn btn-success">Sign Up</button></a>
                   <br>
-                  <p> (Sign up if you haven't before) </p>
+                  <p> (Sign up if you haven't registered before) </p>
                
             </div>
          </div>
