@@ -9,7 +9,7 @@ session_start();
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    
+        <link rel="icon" href="password.png">
         <style>
             .right {
                 text-align: right;
@@ -101,7 +101,7 @@ session_start();
                 <?php
                 
                 $result = mysqli_query($link,"SELECT * FROM pwddata WHERE login_id='".mysqli_real_escape_string($link, $_SESSION["id"])."'");
-                echo "<br><br><table class='table-dark' id='editableTable' border='1' width='90%'>
+                echo "<br><br><table class='table-dark table-striped' id='editableTable' border='1' width='90%'>
                     <tr>
                     <th>Platform</th>
                     <th>Username</th>
@@ -114,9 +114,9 @@ session_start();
                     echo "<tr>";
                     echo "<td>" . $row['platform'] . "</td>";
                     echo "<td>" . $row['username'] . "</td>";
-                    echo "<td>" . $row['password'] . "</td>";
-                    echo "<td><form method='post' style='height:25px'><button type='submit' name='edit' value=" .$row['id']." id='edit' class='btn btn-success'>Edit</button>
-                    <button type='submit' name='delete' value=".$row['id']." id='delete' class='btn btn-danger'>Delete</button></form></td>";
+                    echo "<td>" . openssl_decrypt($row['password'], 'AES-256-CBC', '25c6c7ff35b9979b151f2136cd13b0ff') . "</td>";
+                    echo "<td><form method='post' style='height:25px'><button type='submit' name='edit' value=" .$row['id']." id='edit' class='btn btn-success' style='margin-top:5px'><img src='edit.ico' height='15px'></button>
+                    <button type='submit' name='delete' value=".$row['id']." id='delete' class='btn btn-danger' style='margin-top:5px'><img src='delete.png' height='15px'></button></form></td>";
                     echo "</tr>";
                 }
                 echo "</table>";
@@ -129,12 +129,16 @@ session_start();
                     $passwordedit = $rowedit["password"];
                     $_SESSION['idedit'] = $_POST['edit'];
                     
-                        
-                    
-                    
                     
                 }
                 
+                if (isset($_POST['delete'])){
+                    $resultdelete = mysqli_query($link, "DELETE FROM pwddata WHERE id='".mysqli_real_escape_string($link, $_POST['delete'])."'");
+                    echo "<div class='alert alert-success' role='alert'>
+                        Data deleted successfully!
+                        </div>";
+                    echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
+                }
                 
                 ?>
                 
@@ -157,18 +161,18 @@ session_start();
                   
                   <div class="form-group">
                     <label for="platform" style="color:white">Platform</label>
-                    <input type="text" class="form-control" id="platform" name = "platform" aria-describedby="plHelp" placeholder="Enter platform">
+                    <input type="text" class="form-control" id="platform" required name = "platform" aria-describedby="plHelp" placeholder="Enter platform">
                     <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
                   </div>
                   
                   <div class="form-group">
                     <label for="username" style="color:white">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" aria-describedby="unHelp" placeholder="Enter username">
+                    <input type="text" class="form-control" required id="username" name="username" aria-describedby="unHelp" placeholder="Enter username">
                     <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
                     <label for="password" style="color:white">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <input type="text" class="form-control" required id="password" name="password" placeholder="Password">
                   </div>
                   <button type="submit" class="btn btn-primary">Add</button>';
                   
@@ -187,18 +191,18 @@ session_start();
                   
                   <div class="form-group">
                     <label for="platforme" style="color:white">Platform</label>
-                    <input type="text" class="form-control" id="platforme" name = "platforme" aria-describedby="plHelp" value="'.$platformedit.'">
+                    <input type="text" class="form-control" id="platforme" name = "platforme" required aria-describedby="plHelp" value="'.$platformedit.'">
                     <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
                   </div>
                   
                   <div class="form-group">
                     <label for="usernamee" style="color:white">Username</label>
-                    <input type="text" class="form-control" id="usernamee" name="usernamee" aria-describedby="unHelp" value="'.$usernameedit.'">
+                    <input type="text" class="form-control" id="usernamee" required name="usernamee" aria-describedby="unHelp" value="'.$usernameedit.'">
                     <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
                     <label for="passworde" style="color:white">Password</label>
-                    <input type="password" class="form-control" id="passworde" name="passworde" value="'.$passwordedit.'">
+                    <input type="text" class="form-control" required id="passworde" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', '25c6c7ff35b9979b151f2136cd13b0ff').'">
                   </div>
                   <button type="submit" class="btn btn-success">Save</button>
                   <a href="home.php"><button type="button" class="btn btn-danger">Cancel</button></a>';
@@ -219,34 +223,28 @@ session_start();
             <?php
             if (array_key_exists('platform', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST)) {
                 //echo "<p style='margin-left:75%; color:white;'>Hi</p>";
-                if ($_POST['platform'] == '' or $_POST['username'] == '' or $_POST['password'] == '') {
-        
-                    echo "<div class='alert alert-danger' role='alert'>
-                        Please enter all details!
-                        </div>";
-                }
-                else {
-                    $query = "INSERT INTO `pwddata` (`login_id`, `platform`, `username`, `password`) VALUES ('".mysqli_real_escape_string($link, $_SESSION["id"])."', '".mysqli_real_escape_string($link, $_POST['platform'])."', '".mysqli_real_escape_string($link, $_POST['username'])."', '".mysqli_real_escape_string($link, $_POST['password'])."')";
+                    $encryptionMethod = "AES-256-CBC"; 
+                    $secretHash = "25c6c7ff35b9979b151f2136cd13b0ff";
+                    $encryptedpassword = openssl_encrypt($_POST['password'], $encryptionMethod, $secretHash);
+                
+                    $query = "INSERT INTO `pwddata` (`login_id`, `platform`, `username`, `password`) VALUES ('".mysqli_real_escape_string($link, $_SESSION["id"])."', '".mysqli_real_escape_string($link, $_POST['platform'])."', '".mysqli_real_escape_string($link, $_POST['username'])."', '".mysqli_real_escape_string($link, $encryptedpassword)."')";
                     $result = mysqli_query($link, $query);
-                    echo "<div class='alert alert-success' role='alert'>
+                    echo "<div class='alert alert-success alert-dismissible' role='alert'>
                         Data entered successfully!
                         </div>";
                     echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
-            }
+            
                     
                 }
              
              if (array_key_exists('platforme', $_POST) or array_key_exists('usernamee', $_POST) or array_key_exists('passworde', $_POST)) {
                 //echo "<p style='margin-left:75%; color:white;'>Hi</p>";
-                if ($_POST['platforme'] == '' or $_POST['usernamee'] == '' or $_POST['passworde'] == '') {
-        
-                    echo "<div class='alert alert-danger' role='alert'>
-                        Please enter all details!
-                        </div>";
-                }
-                else {
+                
+                    $encryptionMethod = "AES-256-CBC"; 
+                    $secretHash = "25c6c7ff35b9979b151f2136cd13b0ff";
+                    $encryptedpassworde = openssl_encrypt($_POST['passworde'], $encryptionMethod, $secretHash);
                     
-                    $queryed = "UPDATE `pwddata` SET `platform` = '".$_POST['platforme']."', `username` = '".$_POST['usernamee']."', `password` = '".$_POST['passworde']."' WHERE `id` = '".$_SESSION['idedit']."'";
+                    $queryed = "UPDATE `pwddata` SET `platform` = '".$_POST['platforme']."', `username` = '".$_POST['usernamee']."', `password` = '".$encryptedpassworde."' WHERE `id` = '".$_SESSION['idedit']."'";
                     $resulted = mysqli_query($link, $queryed);
                     echo "<div class='alert alert-success' role='alert'>
                         Data editted successfully!
@@ -257,7 +255,7 @@ session_start();
                     
                     
                     
-            }
+            
                     
                 }
                    

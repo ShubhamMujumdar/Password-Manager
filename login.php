@@ -6,7 +6,13 @@
             body {
                 font-family: "Lato", sans-serif;
             }
+            #title {
+                
+                color: white;
+                font-family: 'Julius Sans One', sans-serif;
 
+                
+            }
 
 
             .main-head{
@@ -82,8 +88,9 @@
             
         </style>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Roboto:wght@300&family=Tangerine&display=swap" rel="stylesheet">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-        
+        <link rel="icon" href="password.png">
     </head>
 
 <body>
@@ -93,7 +100,7 @@
   
 <div class="sidenav">
          <div class="login-main-text">
-            <h2>Password Manager<br> Login</h2>
+            <h2><div id="title">Password Manager<br></div> Login</h2>
             <p>Login or sign up from here to access.</p>
          </div>
       </div>
@@ -104,24 +111,27 @@
                <form method="post">
                   <div class="form-group">
                      <label>Username</label>
-                     <input type="text" class="form-control" placeholder="Username" name="username">
+                     <input type="text" class="form-control" required id="username" placeholder="Username" name="username">
                   </div>
                   <div class="form-group">
                      <label>Password</label>
-                     <input type="password" class="form-control" placeholder="Password" name="password">
+                     <input type="password" class="form-control" required id="password" placeholder="Password" name="password">
+                     <div id="strong"></div>
                   </div>
                   <button type="submit" class="btn btn-black">Login</button>
+                  <a href="forgotpassword.php"><button class="btn btn-danger">Forgot Password</button></a>
                   </form>
                   <br>
                   <a href="signup.php"><button type="button" class="btn btn-success">Sign Up</button></a>
                   <br>
-                  <p> (Sign up if you haven't before:)) </p>
+                  <p> (Sign up if you haven't before) </p>
                
             </div>
          </div>
       </div>
       
     </body>  
+    
 </html>
 
 <?php
@@ -137,18 +147,12 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
     
     }
     
-    if ($_POST['username'] == '' or $_POST['password'] == '') {
-        
-        echo "<div class='alert alert-danger' role='alert' align='center'>
-                Fill in all the details to log in
-            </div>";
-    }
-    else {
+     
         $queryu = "SELECT `id` FROM `pwdlogin` WHERE username = '".$_POST['username']."'";
         $resultu = mysqli_query($link, $queryu);
         $uid = mysqli_fetch_array($resultu);
         if (!isset($uid)){
-            echo "<p style='margin-left: 550px; '><div class='alert alert-danger' role='alert'>
+            echo "<p><div class='alert alert-danger' align='center' role='alert'>
                 That username doesn't exist!
             </div></p>"; 
         }
@@ -156,7 +160,8 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
             $queryp = "SELECT `password` FROM `pwdlogin` WHERE `id` = '".$uid[0]."'";
             $resultp = mysqli_query($link, $queryp);
             $p = mysqli_fetch_array($resultp);
-            if ($p[0] == $_POST['password']){
+            if(password_verify($_POST['password'], $p[0])){
+                
                 $_SESSION["id"] = $uid[0];
                 echo "<script type='text/javascript'> document.location = 'home.php'; </script>";
             }
@@ -167,7 +172,7 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
             
             }
         }
-    }
+    
 
 }
 

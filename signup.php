@@ -6,7 +6,13 @@
             body {
                 font-family: "Lato", sans-serif;
             }
+            #title {
+                
+                color: white;
+                font-family: 'Julius Sans One', sans-serif;
 
+                
+            }
 
 
             .main-head{
@@ -33,11 +39,11 @@
 
             @media screen and (max-width: 450px) {
                 .login-form{
-                    margin-top: 10%;
+                    margin-top: 5%;
                 }
 
                 .register-form{
-                    margin-top: 10%;
+                    margin-top: 5%;
                 }
             }
 
@@ -55,7 +61,7 @@
                 }
 
                 .login-form{
-                    margin-top: 40%;
+                    margin-top: 0%;
                 }
 
                 .register-form{
@@ -84,49 +90,136 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link rel="icon" href="password.png">
     </head>
 
 
 <div class="sidenav">
          <div class="login-main-text">
-            <h2>Password Manager<br> SignUp</h2>
+            <h2><div id="title">Password Manager<br></div> Sign Up</h2>
             <p>Sign Up or Log In from here to access.</p>
          </div>
       </div>
       <div class="main">
          <div class="col-md-6 col-sm-12">
-            <a href="index.php"><img src="homeicon24.png" style="margin-left: 670px;"></a>
+            <a href="index.php"><img src="homeicon24.png" style="margin-left: 200%;"></a>
             <div class="login-form">
-               <form method="post">
+               <form method="post" name="signup" id="signup">
                    <div class="form-group">
                      <label>Name</label>
-                     <input type="text" class="form-control" placeholder="Name" name="name">
+                     <input type="text" class="form-control" placeholder="Name" name="name" required>
                   </div>
                   <div class="form-group">
                      <label>Username</label>
-                     <input type="text" class="form-control" placeholder="Username" name="username">
+                     <input type="text" class="form-control" placeholder="Username" id="username" name="username" required>
                   </div>
                   <div class="form-group">
-                     <label>Password</label>
-                     <input type="password" class="form-control" placeholder="Password" name="password">
+                     <label>Password    <div name="pwdreq" id="pwdreq"></div></label>
+                     <input type="password" class="form-control" placeholder="Password" onfocus="prompt()" id="password" required oninput="strengthcheck()" name="password">
+                     <div id="strong"></div>
+                  </div>
+                  <div class="form-group">
+                     <label>Confirm Password</label>
+                     <input type="password" class="form-control" placeholder="Confirm Password" required id="confirmpassword" oninput="confirm_password()"  name="confirmpassword">
+                     <div id="match"></div>
+                  </div>
+                  <div class="form-group">
+                     <label>Security Question #1: Your mother's maiden name <br></label>
+                     <input type="text" class="form-control" placeholder="eg: Mary" id="sq1" name="sq1" required>
+                  </div>
+                  <div class="form-group">
+                     <label>Security Question #2: Dream vacation destination <br></label>
+                     <input type="text" class="form-control" placeholder="eg: Tokyo" id="sq2" name="sq2" required>
                   </div>
                   
-                  <button type="submit" class="btn btn-black">Sign Up</button>
+                  
+                  <button type="submit" class="btn btn-black" id="signuppls">Sign Up</button>
+                  <a href="login.php"><button type="button" class="btn btn-success">Log in</button></a>
+                  <br><br><p><small> (Log in if you've already signed up) </small></p>
                   </form>
                   
-                  <a href="login.php"><button type="button" class="btn btn-success">Log in</button></a>
-                  <br>
-                  <p> (Log in if you've already signed up) </p>
+                  
+                
                
             </div>
          </div>
       </div>
       
+    <script>
+        var strong = document.getElementById("strong")
+        var match = document.getElementById("match")
+        var promptbox = document.getElementById("pwdreq")
+        var spchar = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        var hasNumber = /\d/;
+        
+        var password = document.signup.password
+        var password2 = document.signup.confirmpassword
+        
+        function prompt() {
+            promptbox.innerHTML="<div class='alert alert-warning alert-dismissible fade show' role='alert'><small>Password should contain numbers and special characters, and should be minimum 7 characters in length</small></div>"
+        }
+        
+        function strengthcheck(){
+            if (password.value.length>6){
+                if (hasNumber.test(password.value) == true) {
+                    if (spchar.test(password.value)== true) {
+                        strong.innerHTML="<p style='color:green'>strong</p>"
+                        promptbox.style.display = "none"
+                        password.style.borderColor = "green"
+                        document.getElementById("signuppls").disabled = false
+                    }
+                    else {
+                        strong.innerHTML="<p style='color:orange'>medium</p>"
+                        password.style.borderColor = "yellow"
+                        document.getElementById("signuppls").disabled = false
+                    }
+                
+                }
+                else {
+                    if (spchar.test(password.value) == true) {
+                        strong.innerHTML="<p style='color:orange'>medium</p>"
+                        password.style.borderColor = "yellow"
+                        document.getElementById("signuppls").disabled = false
+                        
+                    }
+                    else {
+                    strong.innerHTML="<p style='color:red'>weak</p>"
+                    password.style.borderColor = "red"
+                    document.getElementById("signuppls").disabled = true
+                    }
+                }
+            }
+            
+            
+            else {
+                strong.innerHTML="<p style='color:red'>weak</p>"
+                password.style.borderColor = "red"
+                document.getElementById("signuppls").disabled = true
+            }
+        }
+        function confirm_password(){
+            var pass1 = password.value
+            var pass2 = password2.value
+            if (pass1.localeCompare(pass2) == 0) {
+                match.innerHTML="<p style='color: green'>Passwords Match</p>"
+                confirmpassword.style.borderColor = "green"
+                document.getElementById("signuppls").disabled = false
+            }
+            else {
+                match.innerHTML="<p style='color: red'>Passwords Don't Match</p>"
+                confirmpassword.style.borderColor = "red"
+                document.getElementById("signuppls").disabled = true
+            }
+            
+            
+        }
+    </script>
+      
 </html>
 
 <?php
 
-if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST)) {
+if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST) or array_key_exists('sq1', $_POST) or array_key_exists('sq2', $_POST)) {
     
     //echo "<p style='margin-left:75%;'>Hi</p>";
     //checking if loop is entering
@@ -140,13 +233,6 @@ if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or 
     }
     
     
-    if ($_POST['name'] == '' or $_POST['username'] == '' or $_POST['password'] == '') {
-        
-        echo "<div class='alert alert-danger' role='alert' align='right'>
-  Please enter all details!
-</div>";
-    }
-    else {
         $query = "SELECT `id` from `pwdlogin` WHERE username = '".mysqli_real_escape_string($link, $_POST['username'])."'";
         
         $result = mysqli_query($link, $query);
@@ -157,7 +243,8 @@ if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or 
         }
     
         else {
-            $query = "INSERT INTO `pwdlogin` (`name`, `username`, `password`) VALUES ('".mysqli_real_escape_string($link, $_POST['name'])."', '".mysqli_real_escape_string($link, $_POST['username'])."', '".mysqli_real_escape_string($link, $_POST['password'])."')";
+            $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $query = "INSERT INTO `pwdlogin` (`name`, `username`, `password`, `sq1`, `sq2`) VALUES ('".mysqli_real_escape_string($link, $_POST['name'])."', '".mysqli_real_escape_string($link, $_POST['username'])."', '".mysqli_real_escape_string($link, $hashed_password)."', '".mysqli_real_escape_string($link, $_POST['sq1'])."', '".mysqli_real_escape_string($link, $_POST['sq2'])."')";
             
             if (mysqli_query($link, $query)) {
                 
@@ -179,8 +266,8 @@ if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or 
 </div>";
         }
     }
-    }
 }
+
 
 
 

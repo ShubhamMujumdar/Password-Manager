@@ -8,7 +8,16 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <link rel="icon" href="password.png">
+    <style>
+        #title {
+                
+                color: white;
+                font-family: 'Julius Sans One', sans-serif;
 
+                
+            }
+    </style>
 
 
 </head> 
@@ -16,7 +25,7 @@
 <body style="background-color: black">
     
     <nav class="navbar navbar-expand-lg navbar-dark bg-none">
-  <a class="navbar-brand" href="index.php">Password Manager</a>
+  <a class="navbar-brand" href="index.php" id="title">Password Manager</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -27,7 +36,7 @@
         <a class="nav-link" href="/index.php">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="/home.php">Dashboard</a>
+        <a class="nav-link disabled" href="/home.php">Your Profile</a>
       </li>
     </ul>
     <a href="login.php"><button type="button" class="btn btn-outline-light">Log In</button></a>
@@ -37,7 +46,7 @@
 
 <div>
 <h1 style="margin-left:30%; margin-top: 20%; color: white;">You have been logged out!</h1>
-<h3 style="margin-left:42%; color: grey;">Have a nice day!</h2>
+<h3 style="margin-left:27%; color: grey;">Log in to continue using Password Manager</h2>
 </div>   
     
 </body>
