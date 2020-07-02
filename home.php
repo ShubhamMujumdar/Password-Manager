@@ -100,6 +100,8 @@ session_start();
             <div class="column" align="center">
                 <?php
                 
+                include 'key.php';
+                
                 $result = mysqli_query($link,"SELECT * FROM pwddata WHERE login_id='".mysqli_real_escape_string($link, $_SESSION["id"])."'");
                 echo "<br><br><table class='table-dark table-striped' id='editableTable' border='1' width='90%'>
                     <tr>
@@ -114,7 +116,7 @@ session_start();
                     echo "<tr>";
                     echo "<td>" . $row['platform'] . "</td>";
                     echo "<td>" . $row['username'] . "</td>";
-                    echo "<td>" . openssl_decrypt($row['password'], 'AES-256-CBC', '25c6c7ff35b9979b151f2136cd13b0ff') . "</td>";
+                    echo "<td>" . openssl_decrypt($row['password'], 'AES-256-CBC', $key) . "</td>";
                     echo "<td><form method='post' style='height:25px'><button type='submit' name='edit' value=" .$row['id']." id='edit' class='btn btn-success' style='margin-top:5px'><img src='edit.ico' height='15px'></button>
                     <button type='submit' name='delete' value=".$row['id']." id='delete' class='btn btn-danger' style='margin-top:5px'><img src='delete.png' height='15px'></button></form></td>";
                     echo "</tr>";
@@ -154,6 +156,8 @@ session_start();
               <form method="post">
                 <fieldset>
                 <?php 
+                include 'key.php';
+                
                 if (!isset($_POST["edit"])){
                  echo '<legend style="color:white">Add new account</legend>
                 
@@ -202,7 +206,7 @@ session_start();
                   </div>
                   <div class="form-group">
                     <label for="passworde" style="color:white">Password</label>
-                    <input type="text" class="form-control" required id="passworde" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', '25c6c7ff35b9979b151f2136cd13b0ff').'">
+                    <input type="text" class="form-control" required id="passworde" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
                   </div>
                   <button type="submit" class="btn btn-success">Save</button>
                   <a href="home.php"><button type="button" class="btn btn-danger">Cancel</button></a>';
@@ -221,11 +225,13 @@ session_start();
                 
             
             <?php
+            
+            include 'key.php';
             if (array_key_exists('platform', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST)) {
                 //echo "<p style='margin-left:75%; color:white;'>Hi</p>";
                     $encryptionMethod = "AES-256-CBC"; 
-                    $secretHash = "25c6c7ff35b9979b151f2136cd13b0ff";
-                    $encryptedpassword = openssl_encrypt($_POST['password'], $encryptionMethod, $secretHash);
+                    
+                    $encryptedpassword = openssl_encrypt($_POST['password'], $encryptionMethod, $key);
                 
                     $query = "INSERT INTO `pwddata` (`login_id`, `platform`, `username`, `password`) VALUES ('".mysqli_real_escape_string($link, $_SESSION["id"])."', '".mysqli_real_escape_string($link, $_POST['platform'])."', '".mysqli_real_escape_string($link, $_POST['username'])."', '".mysqli_real_escape_string($link, $encryptedpassword)."')";
                     $result = mysqli_query($link, $query);
@@ -241,8 +247,8 @@ session_start();
                 //echo "<p style='margin-left:75%; color:white;'>Hi</p>";
                 
                     $encryptionMethod = "AES-256-CBC"; 
-                    $secretHash = "25c6c7ff35b9979b151f2136cd13b0ff";
-                    $encryptedpassworde = openssl_encrypt($_POST['passworde'], $encryptionMethod, $secretHash);
+                    
+                    $encryptedpassworde = openssl_encrypt($_POST['passworde'], $encryptionMethod, $key);
                     
                     $queryed = "UPDATE `pwddata` SET `platform` = '".$_POST['platforme']."', `username` = '".$_POST['usernamee']."', `password` = '".$encryptedpassworde."' WHERE `id` = '".$_SESSION['idedit']."'";
                     $resulted = mysqli_query($link, $queryed);

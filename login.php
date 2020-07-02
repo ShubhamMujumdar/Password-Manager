@@ -85,6 +85,8 @@
                 color: #fff;
             }  
             
+
+            
             
         </style>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -115,7 +117,8 @@
                   </div>
                   <div class="form-group">
                      <label>Password</label>
-                     <input type="password" class="form-control" required id="password" placeholder="Password" name="password">
+                     <input type="password" class="form-control" required id="password"  placeholder="Password" name="password">
+                     
                      <div id="strong"></div>
                   </div>
                   <button type="submit" class="btn btn-black">Login</button>
@@ -131,6 +134,7 @@
       </div>
       
     </body>  
+    
     
 </html>
 
