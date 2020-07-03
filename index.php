@@ -92,6 +92,9 @@
             </li>';
             }
             ?>
+            <li class="nav-item">
+                <a class="nav-link" href="passwordguide.php">Strong Password Guide</a>
+            </li>
             
             </ul>
             <?php
@@ -146,7 +149,7 @@
               <p class="card-text">Afraid of hackers finding your passwords out and accessing your personal information?</p>
               <div class="d-flex justify-content-between align-items-center">
             
-                <small class="text-muted">Password Manager provides industrial level of security with multiple layers of encryption.</small>
+                <small class="text-muted">Password Manager provides industrial level of security with high-level encryption.</small>
               </div>
             </div>
           </div>

@@ -104,10 +104,10 @@
          <div class="col-md-6 col-sm-12">
             <a href="index.php"><img src="homeicon24.png" style="margin-left: 200%;"></a>
             <div class="login-form">
-               <form method="post" name="signup" id="signup">
+               <form method="post" name="signup" id="signup" autocomplete="off">
                    <div class="form-group">
-                     <label>Name</label>
-                     <input type="text" class="form-control" placeholder="Name" name="name" required>
+                     <label>First Name</label>
+                     <input type="text" class="form-control" placeholder="First Name" name="name" required>
                   </div>
                   <div class="form-group">
                      <label>Username</label>
@@ -253,6 +253,17 @@ if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or 
                 $idquery = "SELECT `id` from `pwdlogin` WHERE username = '".mysqli_real_escape_string($link, $_POST['username'])."'";
                 $idresult = mysqli_query($link, $idquery);
                 $id = mysqli_fetch_array($idresult);
+                
+                $queryname = "SELECT `id` from `names` WHERE name = '".mysqli_real_escape_string($link, $_POST['name'])."'";
+        
+                $resultname = mysqli_query($link, $queryname);
+                if (mysqli_num_rows($resultname) == 0){
+                    $queryunique = "INSERT INTO `names` (`name`) VALUES ('".mysqli_real_escape_string($link, $_POST['name'])."')";
+                    $resultunique = mysqli_query($link, $queryunique);
+                }
+                
+                
+                
                 session_start();
                 $_SESSION["id"] = $id[0];
                 echo "<script type='text/javascript'> document.location = 'home.php'; </script>";

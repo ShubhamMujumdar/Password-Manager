@@ -10,6 +10,7 @@ session_start();
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
         <link rel="icon" href="password.png">
+        <script src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
         <style>
             .right {
                 text-align: right;
@@ -49,6 +50,14 @@ session_start();
             td{
                 text-align: center;
             }
+            #tt {
+                visibility:hidden;
+            }
+            #tt2 {
+                visibility:hidden;
+            }
+            
+                
         </style>
         
     </head>
@@ -69,6 +78,9 @@ session_start();
            
             <li class="nav-item active">
                 <a class="nav-link" href="#">Your profile<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="passwordguide.php">Strong Password Guide</a>
             </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -117,7 +129,7 @@ session_start();
                     echo "<td>" . $row['platform'] . "</td>";
                     echo "<td>" . $row['username'] . "</td>";
                     echo "<td>" . openssl_decrypt($row['password'], 'AES-256-CBC', $key) . "</td>";
-                    echo "<td><form method='post' style='height:25px'><button type='submit' name='edit' value=" .$row['id']." id='edit' class='btn btn-success' style='margin-top:5px'><img src='edit.ico' height='15px'></button>
+                    echo "<td><form method='post' style='height:25px' autocomplete='off'><button type='submit' name='edit' value=" .$row['id']." id='edit' class='btn btn-success' style='margin-top:5px'><img src='edit.ico' height='15px'></button>
                     <button type='submit' name='delete' value=".$row['id']." id='delete' class='btn btn-danger' style='margin-top:5px'><img src='delete.png' height='15px'></button></form></td>";
                     echo "</tr>";
                 }
@@ -159,26 +171,26 @@ session_start();
                 include 'key.php';
                 
                 if (!isset($_POST["edit"])){
-                 echo '<legend style="color:white">Add new account</legend>
+                 echo '<form name="add" autocomplete="off"><legend style="color:white">Add new account</legend>
                 
                 
                   
                   <div class="form-group">
                     <label for="platform" style="color:white">Platform</label>
-                    <input type="text" class="form-control" id="platform" required name = "platform" aria-describedby="plHelp" placeholder="Enter platform">
+                    <input type="text" class="form-control" autocomplete="off" id="platform" required name = "platform" aria-describedby="plHelp" placeholder="Enter platform">
                     <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
                   </div>
                   
                   <div class="form-group">
                     <label for="username" style="color:white">Username</label>
-                    <input type="text" class="form-control" required id="username" name="username" aria-describedby="unHelp" placeholder="Enter username">
+                    <input type="text" class="form-control" required id="username" autocomplete="off" name="username" aria-describedby="unHelp" placeholder="Enter username">
                     <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
-                    <label for="password" style="color:white">Password</label>
-                    <input type="text" class="form-control" required id="password" name="password" placeholder="Password">
+                    <label for="password" style="color:white">Password<a href="#" id="texttt" data-toggle="tooltip"><img src="error.png" style="margin-left:10px" id="tt" class="tt" height="17px"></a></label>
+                    <input type="text" class="form-control" required id="password" autocomplete="off" oninput="strengthcheck()" name="password" placeholder="Password">
                   </div>
-                  <button type="submit" class="btn btn-primary">Add</button>';
+                  <button type="submit" class="btn btn-primary">Add</button></form>';
                   
                   
                   
@@ -189,7 +201,7 @@ session_start();
                     
                     
                     
-                    echo '<legend style="color:white">Edit entry</legend>
+                    echo '<form name="edit" autocomplete="off"><legend style="color:white">Edit entry</legend>
                 
                 
                   
@@ -205,11 +217,16 @@ session_start();
                     <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
-                    <label for="passworde" style="color:white">Password</label>
-                    <input type="text" class="form-control" required id="passworde" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
+                  
+                    <label for="passworde" style="color:white">Password<a href="#" data-toggle="tooltip" id="texttt2"><img src="error.png"  id="tt2" style="margin-left:10px" height="17px"></a></label>
+                    <input type="text" class="form-control" required id="passworde" oninput="strengthcheck2()" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
+                    
+                  
                   </div>
                   <button type="submit" class="btn btn-success">Save</button>
-                  <a href="home.php"><button type="button" class="btn btn-danger">Cancel</button></a>';
+                  <a href="home.php"><button type="button" class="btn btn-danger">Cancel</button></a></form>';
+                  
+                
                     
                 }
                 
@@ -219,6 +236,87 @@ session_start();
             </div>
           </div>
           </div>  
+          <script>
+            $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+            });
+            
+            
+        
+        
+        var spchar = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        var hasNumber = /\d/;
+     
+        
+        function strengthcheck(){
+            if (document.getElementById("password").value.length>5){
+                if (hasNumber.test(document.getElementById("password").value) == true) {
+                    if (spchar.test(document.getElementById("password").value)== true) {
+                        //strong
+                        document.getElementById("tt").style.visibility = "hidden";
+                        
+                    }
+                    else {
+                        document.getElementById("texttt").setAttribute("title", "Password should contain special characters")
+                        document.getElementById("tt").style.visibility = "visible";
+                    }
+                
+                }
+                else {
+                    if (spchar.test(document.getElementById("password").value) == true) {
+                        document.getElementById("texttt").setAttribute("title", "Password should contain numbers")
+                        document.getElementById("tt").style.visibility = "visible";
+                        
+                    }
+                    else {
+                        document.getElementById("texttt").setAttribute("title", "Password should contain numbers and special characters")
+                        document.getElementById("tt").style.visibility = "visible";
+                    }
+                }
+            }
+            
+            
+            else {
+                        document.getElementById("texttt").setAttribute("title", "Password is too short")
+                        document.getElementById("tt").style.visibility = "visible";
+            }
+        }
+        
+        function strengthcheck2(){
+            if (document.getElementById("passworde").value.length>5){
+                if (hasNumber.test(document.getElementById("passworde").value) == true) {
+                    if (spchar.test(document.getElementById("passworde").value)== true) {
+                        //strong
+                        document.getElementById("tt2").style.visibility = "hidden";
+                        
+                    }
+                    else {
+                        document.getElementById("texttt2").setAttribute("title", "Password should contain special characters")
+                        document.getElementById("tt2").style.visibility = "visible";
+                    }
+                
+                }
+                else {
+                    if (spchar.test(document.getElementById("passworde").value) == true) {
+                        document.getElementById("texttt2").setAttribute("title", "Password should contain numbers")
+                        document.getElementById("tt2").style.visibility = "visible";
+                        
+                    }
+                    else {
+                        document.getElementById("texttt2").setAttribute("title", "Password should contain numbers and special characters")
+                        document.getElementById("tt2").style.visibility = "visible";
+                    }
+                }
+            }
+            
+            
+            else {
+                        document.getElementById("texttt2").setAttribute("title", "Password is too short")
+                        document.getElementById("tt2").style.visibility = "visible";
+            }
+        }
+    
+          </script>
           
           
           

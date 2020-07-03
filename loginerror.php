@@ -44,6 +44,9 @@
       <li class="nav-item">
         <a class="nav-link disabled" href="/home.php">Your Profile</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="passwordguide.php">Strong Password Guide</a>
+      </li>
     </ul>
     <a href="login.php"><button type="button" class="btn btn-outline-light">Log In</button></a>
     <a href="signup.php"><button type="button" class="btn btn-outline-light" style="margin-left: 4px;" href="signup.php">Sign Up</button></a>

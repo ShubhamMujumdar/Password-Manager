@@ -110,7 +110,7 @@
          <div class="col-md-6 col-sm-12">
             <a href="/index.php"><img src="homeicon24.png" style="margin-left: 670px;"></a>
             <div class="login-form">
-               <form method="post">
+               <form method="post" autocomplete="off">
                   <div class="form-group">
                      <label>Username</label>
                      <input type="text" class="form-control" required id="username" placeholder="Username" name="username">
