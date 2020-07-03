@@ -1,6 +1,8 @@
 <?php
 session_start();
+//started the session so the session variables work
 ?>
+
 <html lang="en">
     <head>
         <title>Password Manager</title>
@@ -56,11 +58,18 @@ session_start();
             #tt2 {
                 visibility:hidden;
             }
+            #random1 {
+                visibility:hidden;
+            }
+            #random2 {
+                visibility:hidden;
+            }
             
                 
         </style>
         
     </head>
+    
     
     <body style="background-color:black">
         <div class="navbartop">
@@ -97,6 +106,13 @@ session_start();
                     else {
                         echo "<script type='text/javascript'> document.location = '/loginerror.php'; </script>";
                         
+                    }
+                    
+                    $sqlname = "SELECT `name` FROM `names`";
+                    $resultname = mysqli_query($link, $sqlname);
+                    $names = array();
+                    while ($rowname = mysqli_fetch_array($resultname)) {
+                        $names[] = $rowname['name'];
                     }
         
                 ?>
@@ -188,7 +204,11 @@ session_start();
                   </div>
                   <div class="form-group">
                     <label for="password" style="color:white">Password<a href="#" id="texttt" data-toggle="tooltip"><img src="error.png" style="margin-left:10px" id="tt" class="tt" height="17px"></a></label>
-                    <input type="text" class="form-control" required id="password" autocomplete="off" oninput="strengthcheck()" name="password" placeholder="Password">
+                    <input type="text" class="form-control" required id="password" autocomplete="off" onblur="clear()" onfocus="generatepassword()" oninput="strengthcheck()" name="password" placeholder="Password">
+                    <small id="warning1" style="color:red; visibility:hidden">Please set this password in the original platform as well.</small>
+                  </div>
+                  <div class="alert alert-info" role="alert" id="random1">
+                        
                   </div>
                   <button type="submit" class="btn btn-primary">Add</button></form>';
                   
@@ -219,8 +239,11 @@ session_start();
                   <div class="form-group">
                   
                     <label for="passworde" style="color:white">Password<a href="#" data-toggle="tooltip" id="texttt2"><img src="error.png"  id="tt2" style="margin-left:10px" height="17px"></a></label>
-                    <input type="text" class="form-control" required id="passworde" oninput="strengthcheck2()" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
-                    
+                    <input type="text" class="form-control" required id="passworde" onblur="clear2()" oninput="strengthcheck2();namecheck2();" onfocus="generatepassword2()" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
+                    <small id="warning2" style="color:red; visibility:hidden">Please set this password in the original platform as well.</small>
+                    <div class="alert alert-info" role="alert" id="random2">
+                        
+                    </div>
                   
                   </div>
                   <button type="submit" class="btn btn-success">Save</button>
@@ -237,6 +260,73 @@ session_start();
           </div>
           </div>  
           <script>
+          
+            var normalnames =<?php echo json_encode($names );?>;
+            names = normalnames.toLocaleString().toLowerCase().split(',');
+            //var passwordsmall=document.getElementById("password").value.toLowerCase(Locale.US);
+            
+            var text = "";
+            
+            function generatepassword(){
+                
+                text = "";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$#*&@!%^+-/";
+                var number="0123456789";
+                var special="!@#$%^&*()-=+_/";
+
+                for (var i = 0; i < 5; i++){
+                    text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    text += number.charAt(Math.floor(Math.random() * number.length));
+                    text += special.charAt(Math.floor(Math.random() * special.length));
+                    }
+               
+                
+                document.getElementById("random1").style.visibility="visible"
+                document.getElementById("random1").innerHTML="<small>Suggested strong password: <a href='javascript: populate1()'>"+text+"</a></small>";
+                
+                
+            }
+            
+            function generatepassword2(){
+                
+                text = "";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$#*&@!%^+-/";
+                var number="0123456789";
+                var special="!@#$%^&*()-=+_/";
+
+                for (var i = 0; i < 5; i++){
+                    text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    text += number.charAt(Math.floor(Math.random() * number.length));
+                    text += special.charAt(Math.floor(Math.random() * special.length));
+                    }
+               
+                
+                document.getElementById("random2").style.visibility="visible"
+                document.getElementById("random2").innerHTML="<small>Suggested strong password: <a href='javascript: populate2()'>"+text+"</a></small>";
+                
+                
+            }
+            
+            function populate1(){
+                document.getElementById("password").value=text;
+                document.getElementById("warning1").style.visibility="visible"
+            }
+            function populate2(){
+                document.getElementById("passworde").value=text;
+                document.getElementById("warning2").style.visibility="visible"
+            }
+            
+            function clear(){
+                alert("hi");
+            }
+            
+            
+            
+            
+            
+          
+          
+          
             $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
             });
@@ -248,12 +338,16 @@ session_start();
         var hasNumber = /\d/;
      
         
-        function strengthcheck(){
+       
+                
+        function strengthcheck() {    
             if (document.getElementById("password").value.length>5){
                 if (hasNumber.test(document.getElementById("password").value) == true) {
                     if (spchar.test(document.getElementById("password").value)== true) {
-                        //strong
+                        
+                        
                         document.getElementById("tt").style.visibility = "hidden";
+                        
                         
                     }
                     else {
@@ -314,6 +408,7 @@ session_start();
                         document.getElementById("texttt2").setAttribute("title", "Password is too short")
                         document.getElementById("tt2").style.visibility = "visible";
             }
+            
         }
     
           </script>
