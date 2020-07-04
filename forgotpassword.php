@@ -218,10 +218,12 @@
 
 <?php
 
+//cool stuff
+
 session_start();
 if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST) or array_key_exists('sq1', $_POST) or array_key_exists('sq2', $_POST)) {
     
-    
+    //connect to db
     $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "collegekids-313331a8e8");
     if (mysqli_connect_error()) {
     
@@ -229,7 +231,7 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
     
     }
     
-     
+     //check if username exists in db
         $queryu = "SELECT `id` FROM `pwdlogin` WHERE username = '".$_POST['username']."'";
         $resultu = mysqli_query($link, $queryu);
         $uid = mysqli_fetch_array($resultu);
@@ -239,7 +241,7 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
             </div></p>"; 
         }
         else{
-            
+        //check if security questions match, compare with the previous password    
             $querypwd = "SELECT `password` FROM `pwdlogin` WHERE `id` = '".$uid[0]."'";
             $resultpwd = mysqli_query($link, $querypwd);
             $cpwd = mysqli_fetch_array($resultpwd); 
@@ -261,7 +263,7 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
             </div></p>"; 
                 }
                 else{
-                
+                //encrypt and set new password
                     
                 $queryed = "UPDATE `pwdlogin` SET `password` = '".$hashed_password."' WHERE `id` = '".$uid[0]."'";
                 $resulted = mysqli_query($link, $queryed);
@@ -276,6 +278,7 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
                 }
                 
             }
+            //security questions are wrong
             else {
                 echo "<div class='alert alert-danger' align='right' role='alert'>Answer the Questions correctly</div>";
             }

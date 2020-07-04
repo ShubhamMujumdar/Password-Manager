@@ -59,6 +59,7 @@
     <ul class="navbar-nav ml-auto">
             <li class="nav-item" class="right">
                 <?php
+                //check if user is logged in, if yes-show his/her name, if no-give log in/signup options
                     session_start();
                     $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "collegekids-313331a8e8");
                     if (isset ($_SESSION["id"])){

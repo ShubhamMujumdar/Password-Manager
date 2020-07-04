@@ -149,6 +149,10 @@
       </div>
       
     <script>
+    
+    //haven't given random password generation feature to signup form, because it's nearly impossible to remember a 15-digit string and user may end up compromising the most important password by writing it down at an accessible place
+    
+    //validation
         var strong = document.getElementById("strong")
         var match = document.getElementById("match")
         var promptbox = document.getElementById("pwdreq")
@@ -216,6 +220,7 @@
             
             
         }
+        //show/hide password
         var state=false;
         function toggle() {
             if (state){
@@ -250,6 +255,8 @@
 </html>
 
 <?php
+
+//putting all the data into db and logging the user in
 
 if (array_key_exists('name', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST) or array_key_exists('sq1', $_POST) or array_key_exists('sq2', $_POST)) {
     

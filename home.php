@@ -95,6 +95,7 @@ session_start();
             <ul class="navbar-nav ml-auto">
             <li class="nav-item" class="right">
                 <?php
+                //check if user is logged in, retrieve user's first name and display, or else redirect to loginerror page
                     session_start();
                     $link = mysqli_connect("shareddb-t.hosting.stackcp.net", "mujumdarshubham", "d.r.a.g.o.n.", "collegekids-313331a8e8");
                     if (isset ($_SESSION["id"])){
@@ -108,12 +109,14 @@ session_start();
                         
                     }
                     
-                    $sqlname = "SELECT `name` FROM `names`";
+                    //thought of checking the password against a db table full of names to ensure password doesn't contain names that makes it vulnerable
+                    //didn't really work out:(
+                    /*$sqlname = "SELECT `name` FROM `names`";
                     $resultname = mysqli_query($link, $sqlname);
                     $names = array();
                     while ($rowname = mysqli_fetch_array($resultname)) {
                         $names[] = $rowname['name'];
-                    }
+                    }*/
         
                 ?>
             </li>
@@ -127,17 +130,21 @@ session_start();
             
             <div class="column" align="center">
                 <?php
+                //displaying the passwords and other data
+                
+                //using AES for encryption with an external key file kept on server
                 
                 include 'key.php';
                 
                 $result = mysqli_query($link,"SELECT * FROM pwddata WHERE login_id='".mysqli_real_escape_string($link, $_SESSION["id"])."'");
-                echo "<br><br><table class='table-dark table-striped' id='editableTable' border='1' width='90%'>
-                    <tr>
+                echo "<br><br><table class='table-dark table-striped' style='margin-bottom:5px' id='editableTable' border='1' width='90%'>
+                    <thead class='thead-dark' style='background-color:#202020'>
+                    <tr style='height:40px'>
                     <th>Platform</th>
                     <th>Username</th>
                     <th>Password</th>
                     <th id='labelcenter'>Action</th>
-                    </tr>";
+                    </tr></thead>";
     
                 while($row = mysqli_fetch_array($result))
                 {
@@ -151,6 +158,7 @@ session_start();
                 }
                 echo "</table>";
                 
+                //setting variables to show on the edit form
                 if (isset($_POST['edit'])){
                     $resultedit = mysqli_query($link,"SELECT * FROM pwddata WHERE id='".mysqli_real_escape_string($link, $_POST["edit"])."'");
                     $rowedit = mysqli_fetch_array($resultedit);
@@ -161,7 +169,7 @@ session_start();
                     
                     
                 }
-                
+                //deleting if delete is pressed
                 if (isset($_POST['delete'])){
                     $resultdelete = mysqli_query($link, "DELETE FROM pwddata WHERE id='".mysqli_real_escape_string($link, $_POST['delete'])."'");
                     echo "<div class='alert alert-success' role='alert'>
@@ -187,6 +195,7 @@ session_start();
                 include 'key.php';
                 
                 if (!isset($_POST["edit"])){
+                    //add new data
                  echo '<form name="add" autocomplete="off"><legend style="color:white">Add new account</legend>
                 
                 
@@ -216,6 +225,7 @@ session_start();
                   
                   }
                 else {
+                    //edit existing data
                     $result = mysqli_query($link,"SELECT * FROM pwddata WHERE id='".$POST['edit']."'");
                     $row = mysqli_fetch_array($result);
                     
@@ -227,19 +237,19 @@ session_start();
                   
                   <div class="form-group">
                     <label for="platforme" style="color:white">Platform</label>
-                    <input type="text" class="form-control" id="platforme" name = "platforme" required aria-describedby="plHelp" value="'.$platformedit.'">
+                    <input type="text" autocomplete="off" class="form-control" id="platforme" name = "platforme" required aria-describedby="plHelp" value="'.$platformedit.'">
                     <small id="plHelp" class="form-text text-muted">Eg: Facebook, Twitter, Reddit, etc.</small>
                   </div>
                   
                   <div class="form-group">
                     <label for="usernamee" style="color:white">Username</label>
-                    <input type="text" class="form-control" id="usernamee" required name="usernamee" aria-describedby="unHelp" value="'.$usernameedit.'">
+                    <input type="text" autocomplete="off" class="form-control" id="usernamee" required name="usernamee" aria-describedby="unHelp" value="'.$usernameedit.'">
                     <small id="unHelp" class="form-text text-muted">We will never share your details with anyone else.</small>
                   </div>
                   <div class="form-group">
                   
                     <label for="passworde" style="color:white">Password<a href="#" data-toggle="tooltip" id="texttt2"><img src="error.png"  id="tt2" style="margin-left:10px" height="17px"></a></label>
-                    <input type="text" class="form-control" required id="passworde" onblur="clear2()" oninput="strengthcheck2();namecheck2();" onfocus="generatepassword2()" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
+                    <input type="text" autocomplete="off" class="form-control" required id="passworde" onblur="clear2()" oninput="strengthcheck2();namecheck2();" onfocus="generatepassword2()" name="passworde" value="'.openssl_decrypt($passwordedit, 'AES-256-CBC', $key).'">
                     <small id="warning2" style="color:red; visibility:hidden">Please set this password in the original platform as well.</small>
                     <div class="alert alert-info" role="alert" id="random2">
                         
@@ -261,18 +271,21 @@ session_start();
           </div>  
           <script>
           
-            var normalnames =<?php echo json_encode($names );?>;
-            names = normalnames.toLocaleString().toLowerCase().split(',');
+            //failed attempt at comparing with names db
+            //var normalnames =<?php //echo json_encode($names );?>;
+            //names = normalnames.toLocaleString().toLowerCase().split(',');
             //var passwordsmall=document.getElementById("password").value.toLowerCase(Locale.US);
             
+            //generating strong password completely randomly
             var text = "";
             
             function generatepassword(){
                 
                 text = "";
-                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$#*&@!%^+-/";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                 var number="0123456789";
                 var special="!@#$%^&*()-=+_/";
+                //using these 3 strings, i can ensure that every generated password contains alphabets, numbers and sp characters, and is 15 digit long
 
                 for (var i = 0; i < 5; i++){
                     text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -289,8 +302,10 @@ session_start();
             
             function generatepassword2(){
                 
+                //generating similar strong password for the edit form
+                
                 text = "";
-                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$#*&@!%^+-/";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                 var number="0123456789";
                 var special="!@#$%^&*()-=+_/";
 
@@ -308,10 +323,12 @@ session_start();
             }
             
             function populate1(){
+                //for filling the password suggestion into the password box on clicking
                 document.getElementById("password").value=text;
                 document.getElementById("warning1").style.visibility="visible"
             }
             function populate2(){
+                //same as above, but for edit form
                 document.getElementById("passworde").value=text;
                 document.getElementById("warning2").style.visibility="visible"
             }
@@ -336,7 +353,7 @@ session_start();
             });
             
             
-        
+        //validation
         
         var spchar = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
         var hasNumber = /\d/;
@@ -422,6 +439,8 @@ session_start();
                 
             
             <?php
+            
+            //backend for entering data into the db
             
             include 'key.php';
             if (array_key_exists('platform', $_POST) or array_key_exists('username', $_POST) or array_key_exists('password', $_POST)) {

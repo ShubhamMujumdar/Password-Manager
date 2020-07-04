@@ -138,6 +138,7 @@
       
     </body>  
     <script>
+        //view/hide password
         var state=false;
         function toggle() {
             if (state){
@@ -170,7 +171,7 @@ if (array_key_exists('username', $_POST) or array_key_exists('password', $_POST)
     die ("There was an issue with connecting to the database.");
     
     }
-    
+    //comparing username and corresponding password to db and redirecting to the home page after creating session variable containing the id of the row corresponding to user
      
         $queryu = "SELECT `id` FROM `pwdlogin` WHERE username = '".$_POST['username']."'";
         $resultu = mysqli_query($link, $queryu);

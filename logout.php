@@ -56,6 +56,8 @@
 </html>
 
 <?php
+
+//remove session variable-simple
 session_start();
     if (isset($_SESSION["id"])){
         unset($_SESSION["id"]);
