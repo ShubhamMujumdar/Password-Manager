@@ -39,7 +39,7 @@
         <a class="nav-link disabled" href="/home.php">Your Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Strong Password Guide</a>
+        <a class="nav-link" href="passwordguide.php">Strong Password Guide</a>
       </li>
     </ul>
     <a href="login.php"><button type="button" class="btn btn-outline-light">Log In</button></a>

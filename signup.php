@@ -83,7 +83,7 @@
             .btn-black{
                 background-color: #000 !important;
                 color: #fff;
-            }  
+            } 
             
             
         </style>
@@ -116,6 +116,8 @@
                   <div class="form-group">
                      <label>Password    <div name="pwdreq" id="pwdreq"></div></label>
                      <input type="password" class="form-control" placeholder="Password" onfocus="prompt()" id="password" required oninput="strengthcheck()" name="password">
+                     
+                     
                      <div id="strong"></div>
                   </div>
                   <div class="form-group">
@@ -213,6 +215,7 @@
             
             
         }
+       
     </script>
       
 </html>

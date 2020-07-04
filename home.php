@@ -283,7 +283,7 @@ session_start();
                 
                 document.getElementById("random1").style.visibility="visible"
                 document.getElementById("random1").innerHTML="<small>Suggested strong password: <a href='javascript: populate1()'>"+text+"</a></small>";
-                
+                document.getElementById("warning1").style.visibility="hidden"
                 
             }
             
@@ -303,7 +303,7 @@ session_start();
                 
                 document.getElementById("random2").style.visibility="visible"
                 document.getElementById("random2").innerHTML="<small>Suggested strong password: <a href='javascript: populate2()'>"+text+"</a></small>";
-                
+                document.getElementById("warning2").style.visibility="hidden"
                 
             }
             
@@ -317,7 +317,11 @@ session_start();
             }
             
             function clear(){
-                alert("hi");
+                document.getElementById("random1").style.visibility="visible"
+            }
+            
+            function clear2(){
+                document.getElementById("random2").style.visibility="visible"
             }
             
             
