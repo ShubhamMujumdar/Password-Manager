@@ -116,13 +116,14 @@
                   <div class="form-group">
                      <label>Password    <div name="pwdreq" id="pwdreq"></div></label>
                      <input type="password" class="form-control" placeholder="Password" onfocus="prompt()" id="password" required oninput="strengthcheck()" name="password">
-                     
+                     <img src="eye.png" id="eye" height="20px" onclick="toggle()" style="position:absolute; margin-top:0px;transform:translate(0,-145%); margin-left:300px;">
                      
                      <div id="strong"></div>
                   </div>
                   <div class="form-group">
                      <label>Confirm Password</label>
                      <input type="password" class="form-control" placeholder="Confirm Password" required id="confirmpassword" oninput="confirm_password()"  name="confirmpassword">
+                     <img src="eye.png" id="eye1" height="20px" onclick="toggle1()" style="position:absolute; margin-top:0px;transform:translate(0,-145%); margin-left:300px;">
                      <div id="match"></div>
                   </div>
                   <div class="form-group">
@@ -215,7 +216,35 @@
             
             
         }
-       
+        var state=false;
+        function toggle() {
+            if (state){
+                document.getElementById("password").setAttribute("type","password");
+                document.getElementById("eye").setAttribute("src","eye.png");
+                state = false;
+            }
+            else{
+                document.getElementById("password").setAttribute("type","text");
+                document.getElementById("eye").setAttribute("src","hide.png");
+                state = true;
+            }
+            
+            
+        }
+        function toggle1() {
+            if (state){
+                document.getElementById("confirmpassword").setAttribute("type","password");
+                document.getElementById("eye1").setAttribute("src","eye.png");
+                state = false;
+            }
+            else{
+                document.getElementById("confirmpassword").setAttribute("type","text");
+                document.getElementById("eye1").setAttribute("src","hide.png");
+                state = true;
+            }
+            
+            
+        }
     </script>
       
 </html>

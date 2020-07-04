@@ -93,6 +93,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Roboto:wght@300&family=Tangerine&display=swap" rel="stylesheet">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <link rel="icon" href="password.png">
+        <script src="https://use.fontawesome.com/1a55e52ab6.js"></script>
     </head>
 
 <body>
@@ -117,8 +118,10 @@
                   </div>
                   <div class="form-group">
                      <label>Password</label>
+                     <div class="wrapper">
                      <input type="password" class="form-control" required id="password"  placeholder="Password" name="password">
-                     
+                     <img src="eye.png" id="eye" height="20px" onclick="toggle()" style="position:absolute; margin-top:0px;transform:translate(0,-145%); margin-left:300px;">
+                     </div>
                      <div id="strong"></div>
                   </div>
                   <button type="submit" class="btn btn-black">Login</button>
@@ -134,6 +137,23 @@
       </div>
       
     </body>  
+    <script>
+        var state=false;
+        function toggle() {
+            if (state){
+                document.getElementById("password").setAttribute("type","password");
+                document.getElementById("eye").setAttribute("src","eye.png");
+                state = false;
+            }
+            else{
+                document.getElementById("password").setAttribute("type","text");
+                document.getElementById("eye").setAttribute("src","hide.png");
+                state = true;
+            }
+            
+            
+        }
+    </script>
     
     
 </html>
